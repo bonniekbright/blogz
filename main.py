@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template
+from flask import Flask, request, redirect, render_template, flash
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -18,7 +18,6 @@ class Blog(db.Model):
         self.title = title
         self.body = body
 
-
 @app.route('/blog', methods=['POST', 'GET'])
 def index():
     blog_entries = Blog.query.all()
@@ -31,24 +30,20 @@ def index():
 def add_entry():
     if request.method == 'POST':
         title = request.form['title']
+        blog = request.form['body']
+        if not title:
+            error = "Blog entry must contain both a title and content"
+            return render_template("new-entry.html", error=error)
+        if not blog:
+            error = "Blog entry must contain both a title and content"
+            return render_template("new-entry.html", error=error)
+        title = request.form['title']
         body = request.form['body']
         new_entry = Blog(title, body)
         db.session.add(new_entry)
         db.session.commit()
         return redirect('/blog')
-    else:
-        return render_template('new-entry.html', page_title="Add a New Entry")
-
-# @app.route('/delete-task', methods=['POST'])
-# def delete_task():
-
-#     task_id = int(request.form['task-id'])
-#     task = Task.query.get(task_id)
-#     task.completed = True
-#     db.session.add(task)
-#     db.session.commit()
-
-#     return redirect('/')
+    return render_template('new-entry.html', page_title="Add a New Entry")
 
 
 if __name__ == '__main__':

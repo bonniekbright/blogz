@@ -1,0 +1,19 @@
+.blog-title {
+    text-align: center;
+    margin: auto;
+    padding: 1em;
+}
+
+nav {
+    padding: 1em;
+}
+
+.blog-entries {
+    list-style-type: none;
+}
+
+.add-title {
+    text-align: center;
+    padding: 1em;
+}
+

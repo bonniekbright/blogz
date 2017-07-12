@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-
+<h1 class="blog-title"> Build a Blog </h1>
     {% if blog_entries|length == 0 %}
         <p>No blogs yet</p>
     {% else %}
         {% for blog in blog_entries %}
-        <ul style="list-style-type:none">
+        <ul class="blog-entries">
              <li>
                 <a href="./blog?id={{blog.id}}">
                     <h2>{{blog.title}}</h2>
