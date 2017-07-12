@@ -4,18 +4,20 @@
    
     <h1 class="add-title">Add a Blog Entry</h1>
     <form method='post'>
-        <table>
-            <tr>
-                <td><label>Title for your new blog: </label></td>
-                <td><input type="text" name='title' value="{{title}}" ></td>
-            </tr>
-            <tr>
-                <td><label>Your new blog:</label></td>
-                <td><textarea name="body" rows="15" cols="50">{{body}}</textarea></td>
-            </tr>
-         </table>
-        <div class="error">{{error}} </div>
-        <input type="submit" value='Add Entry' />
+        <p>
+            <label>Title for your new blog:
+                <input type="text" name='title' value="{{title}}" >
+            </label>
+        </p>
+        <p>
+            <label>
+                Your new blog:
+            </label>
+             <textarea name="body" rows="15" cols="50"></textarea>
+         </p>
+         <p>
+            <div class="error">{{error}} </div>
+            <input type="submit" value='Add Entry' />
         </p>
     </form>
 {% endblock %}
