@@ -30,13 +30,13 @@ def index():
 def add_entry():
     if request.method == 'POST':
         title = request.form['title']
-        blog = request.form['body']
+        body = request.form['body']
         if not title:
             error = "Blog entry must contain both a title and content"
-            return render_template("new-entry.html", error=error)
-        if not blog:
+            return render_template("new-entry.html", error=error, body=body)
+        if not body:
             error = "Blog entry must contain both a title and content"
-            return render_template("new-entry.html", error=error)
+            return render_template("new-entry.html", error=error, title=title)
         title = request.form['title']
         body = request.form['body']
         new_entry = Blog(title, body)

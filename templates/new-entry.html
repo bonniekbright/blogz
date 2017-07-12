@@ -7,14 +7,14 @@
         <p class="add-entry">
         <label>
             Title for your new blog:
-            <input type="text" name='title' />
+            <input type="text" name='title' value="{{title}}" >
         </label>
         </p>
         <p class="add-entry">
          <label>
             Your new blog:
         </label>
-             <textarea name="body" rows="15" cols="50"></textarea>
+             <textarea name="body" rows="15" cols="50">{{body}}</textarea>
          </p>
          <p>
             <div class="error">{{error}} </div>
