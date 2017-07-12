@@ -17,3 +17,10 @@ nav {
     padding: 1em;
 }
 
+div.pair {
+    float:left;
+}
+
+input {
+    display: block;
+}
