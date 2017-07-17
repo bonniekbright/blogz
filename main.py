@@ -8,7 +8,7 @@ app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 
 def validate_username(username):
-    username, username_error = username, ""
+    username_error = ""
     user = User.query.filter_by(username=username).first()
     if username == "":
         username_error = "No username entered."
@@ -24,7 +24,7 @@ def validate_username(username):
     return username, username_error
 
 def validate_password(password):
-    password, password_error = password, ""
+    password_error = ""
     if password == "":
         password_error = "No password entered."
     elif len(password) < 3 or len(password) > 20:
@@ -36,7 +36,7 @@ def validate_password(password):
     return password, password_error
 
 def validate_verify(verify):
-    verify, verify_error = verify, ""
+    verify_error = ""
     password = request.form['password']
     if verify == "":
         verify_error = "No verify password was entered"
