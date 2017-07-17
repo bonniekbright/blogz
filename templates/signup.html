@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="main">
+    <h1>Sign Up</h1>
+    <form action="/validate" method="post">
+        <table>
+            <tr>
+                <td align="right" class="bold">Username </br>
+                </td>
+                <td align="left"><input type="text" name="username" value="{{username}}" /></td>
+                <td align="left" class="error">{{username_error}}</td>
+            </tr>
+            <tr>
+                <td align="right" class="bold">Password</br></td>
+                <td align="left"><input type="password" name="password" value="{{password}}" /></td>
+                <td align="left" class="error">{{password_error}}</td>
+            </tr>
+            <tr>
+                <td align="right" class="bold">Verify Password</br></td>
+                <td align="left"><input type="password" name="verify" value="{{verify}}" /></td>
+                <td align="left" class="error">{{verify_error}}</td>
+            </tr>
+        </table>
+        <input class="submit button" type="submit" name="submit" value="Submit">
+    </form>
+</div>
+
+{% endblock %}
