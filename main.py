@@ -91,7 +91,6 @@ def add_entry():
     if request.method == 'POST':
         title = request.form['title']
         body = request.form['body']
-        owner_id = request.form['owner-id']
         if not title:
             error = "Blog entry must contain both a title and content"
             return render_template("new-entry.html", error=error, body=body)
@@ -100,8 +99,8 @@ def add_entry():
             return render_template("new-entry.html", error=error, title=title)
         title = request.form['title']
         body = request.form['body']
-        owner_id = request.form['owner_id']        
-        new_entry = Blog(title, body, owner_id)
+        owner = User.query.filter_by(username=session['username']).first()   
+        new_entry = Blog(title, body, owner)
         db.session.add(new_entry)
         db.session.commit()
         blog_id = new_entry.id
@@ -123,11 +122,10 @@ def login():
         user = User.query.filter_by(username=username).first()
         if user and user.password == password:
             session['username'] = username
-            return redirect('/blog')
+            flash("Logged in")
+            return render_template('/new-entry.html')
         else:
-            # TODO - explain why login failed
-            return '<h1>Error!</h1>'
-
+            flash('User password incorrect, or user does not exist', 'error')
     return render_template('login.html')
 
 @app.route('/logout')
