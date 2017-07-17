@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template, flash
+from flask import Flask, request, redirect, render_template, flash, session
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -6,6 +6,7 @@ app.config['DEBUG'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:hello@localhost:8889/blogz'
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
+app.secret_key = 'y337kGcys&zP3B'
 
 def validate_username(username):
     username_error = ""
@@ -108,9 +109,31 @@ def add_entry():
         return redirect("/blog?id=" + str(new_entry.id))
     return render_template('new-entry.html', page_title="Add a New Entry")
 
-@app.route("/login")
+# @app.before_request
+# def require_login():
+#     allowed_routes = ['login', 'signup']
+#     if request.endpoint not in allowed_routes and 'username' not in session:
+#         return redirect('/login')
+
+@app.route('/login', methods=['POST', 'GET'])
 def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username).first()
+        if user and user.password == password:
+            session['username'] = username
+            return redirect('/blog')
+        else:
+            # TODO - explain why login failed
+            return '<h1>Error!</h1>'
+
     return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    del session['username']
+    return redirect('/login')
 
 @app.route("/signup")
 def signup():
@@ -129,6 +152,7 @@ def validate():
         new_user = User(username, password)
         db.session.add(new_user)
         db.session.commit()
+        session['username'] = username
         return render_template('blog.html', username = username)
     else:
         return render_template('signup.html', username = username, username_error = username_error, password_error = password_error, 
