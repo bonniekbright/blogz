@@ -88,6 +88,7 @@ def blog():
 
 @app.route('/new-entry', methods=["POST", "GET"])
 def add_entry():
+    # owner = User.query.filter_by(username=session['username']).first()
     if request.method == 'POST':
         title = request.form['title']
         body = request.form['body']
@@ -124,14 +125,16 @@ def login():
             session['username'] = username
             flash("Logged in")
             return render_template('/new-entry.html')
-        else:
-            flash('User password incorrect, or user does not exist', 'error')
+        elif user == None:
+            flash('Username does not exist', 'error')
+        elif user.password != password:
+            flash('Your password is incorrect', 'error')
     return render_template('login.html')
 
 @app.route('/logout')
 def logout():
     del session['username']
-    return redirect('/login')
+    return redirect('/blog')
 
 @app.route("/signup")
 def signup():
