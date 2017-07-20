@@ -88,7 +88,6 @@ def blog():
 
 @app.route('/new-entry', methods=["POST", "GET"])
 def add_entry():
-    # owner = User.query.filter_by(username=session['username']).first()
     if request.method == 'POST':
         title = request.form['title']
         body = request.form['body']
@@ -109,11 +108,19 @@ def add_entry():
         return redirect("/blog?id=" + str(new_entry.id))
     return render_template('new-entry.html', page_title="Add a New Entry")
 
-# @app.before_request
-# def require_login():
-#     allowed_routes = ['login', 'signup']
-#     if request.endpoint not in allowed_routes and 'username' not in session:
-#         return redirect('/login')
+@app.before_request
+def require_login():
+    allowed_routes = ['login', 'signup', 'validate']
+    if request.endpoint not in allowed_routes and 'username' not in session:
+        print("Look here")
+        return redirect('/login')
+
+@app.route('/')
+def index():
+    users = User.query.all()
+    print(users)
+    return render_template('index.html', title="Home", users=users )
+
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -124,7 +131,7 @@ def login():
         if user and user.password == password:
             session['username'] = username
             flash("Logged in")
-            return render_template('/new-entry.html')
+            return render_template('new-entry.html')
         elif user == None:
             flash('Username does not exist', 'error')
         elif user.password != password:
@@ -136,7 +143,7 @@ def logout():
     del session['username']
     return redirect('/blog')
 
-@app.route("/signup")
+@app.route('/signup')
 def signup():
     return render_template('signup.html')
 
