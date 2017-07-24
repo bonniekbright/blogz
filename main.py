@@ -75,19 +75,26 @@ class User(db.Model):
 
 @app.route('/blog', methods=['POST', 'GET'])
 def blog():
-    blog_id = request.args.get('id')
-    if blog_id:
+    blog_entries = Blog.query.all()
+    if "id" in request.args:
+        blog_id = request.args.get('id')
         blog = Blog.query.filter_by(id=blog_id).first()
         return render_template("entry.html", blog_id = blog_id, blog=blog)
-    
-    blog_entries = Blog.query.all()
 
-    return render_template('blog.html', title="Blog", 
-    blog_entries=blog_entries)
+    if "user" in request.args:
+        owner_id = request.args.get('user')
+        userEntries = Blog.query.filter_by(owner_id=owner_id)
+        username = User.query.get(owner_id)
+
+        return render_template('userpage.html', page_title = "User's entries", userEntries = userEntries, user = username)
+
+    return render_template('blog.html', title="Blog", blog_entries=blog_entries)
 
 
 @app.route('/new-entry', methods=["POST", "GET"])
 def add_entry():
+    if request.method == "GET":
+        return render_template('new-entry.html', page_title="Add a New Entry")
     if request.method == 'POST':
         title = request.form['title']
         body = request.form['body']
@@ -105,21 +112,18 @@ def add_entry():
         db.session.commit()
         blog_id = new_entry.id
         blog = Blog.query.get(blog_id)
-        return redirect("/blog?id=" + str(new_entry.id))
-    return render_template('new-entry.html', page_title="Add a New Entry")
+        return render_template("entry.html", blog_id = blog_id, blog=blog)
 
 @app.before_request
 def require_login():
-    allowed_routes = ['login', 'signup', 'validate']
+    allowed_routes = ['login', 'signup', 'validate', 'blog', 'index']
     if request.endpoint not in allowed_routes and 'username' not in session:
-        print("Look here")
         return redirect('/login')
 
 @app.route('/')
 def index():
     users = User.query.all()
-    print(users)
-    return render_template('index.html', title="Home", users=users )
+    return render_template('index.html', title="Home", users=users   )
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -131,7 +135,7 @@ def login():
         if user and user.password == password:
             session['username'] = username
             flash("Logged in")
-            return render_template('new-entry.html')
+            return redirect('/new-entry') 
         elif user == None:
             flash('Username does not exist', 'error')
         elif user.password != password:
@@ -156,7 +160,6 @@ def validate():
     verify, verify_error = validate_verify(request.form["verify"])
 
     if not username_error and not password_error and not verify_error:
-        print("this is where the user gets created")
         new_user = User(username, password)
         db.session.add(new_user)
         db.session.commit()

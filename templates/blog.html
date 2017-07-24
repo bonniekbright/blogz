@@ -12,6 +12,7 @@
                 </a>
             </li>
              <li>{{blog.body}}</li>
+              <li><a href="./blog?user={{blog.owner_id}}">written by {{blog.owner.username}}</a></li>
         </ul>
         <hr />
         {% endfor %}

@@ -2,12 +2,19 @@
 {% block content %}
 
 <h1> List of Users: </h1>
-{% for user in users %}
-    <ul>
-        <li>
-            <h2>{{user.username}}</h2>
-        </li>
+{% if users|length == 0 %}
+    <p>No users yet.</p>
+{% else %}
+    {% for user in users %}
+     <ul style="list-style-type:none">
+            <li>
+                <a href="./blog?user={{user.id}}">
+                <h2>
+                    <li>{{user.username}}</li>
+                </h2>
+             </a>
+            </li>
     </ul>
-{% endfor %}
-
+    {% endfor %}
+{% endif %}
 {% endblock %}

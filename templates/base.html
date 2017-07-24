@@ -7,8 +7,10 @@
 <body>
     <nav>
         <a href="/">Home</a> |
-        <a href="/login">Login</a> |
-        <a href="/blog">Main Blog Page</a> |
+         {% if not session['username'] %}
+            <a href="/login">Login</a> |
+        {% endif %}
+        <a href="/blog">All Posts</a> |
         <a href="/new-entry">Add a New Entry</a>
         {% if session['username'] %}
             | <a href="./logout">Log out</a>
