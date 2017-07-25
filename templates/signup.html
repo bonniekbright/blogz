@@ -2,28 +2,28 @@
 
 {% block content %}
 
-<div class="main">
+<div>
     <h1>Sign Up</h1>
     <form action="/validate" method="post">
         <table>
             <tr>
-                <td align="right" class="bold">Username </br>
+                <td align="right">Username </br>
                 </td>
                 <td align="left"><input type="text" name="username" value="{{username}}" /></td>
-                <td align="left" class="error">{{username_error}}</td>
+                <td align="left">{{username_error}}</td>
             </tr>
             <tr>
-                <td align="right" class="bold">Password</br></td>
+                <td align="right">Password</br></td>
                 <td align="left"><input type="password" name="password" value="{{password}}" /></td>
-                <td align="left" class="error">{{password_error}}</td>
+                <td align="left">{{password_error}}</td>
             </tr>
             <tr>
-                <td align="right" class="bold">Verify Password</br></td>
+                <td align="right">Verify Password</br></td>
                 <td align="left"><input type="password" name="verify" value="{{verify}}" /></td>
-                <td align="left" class="error">{{verify_error}}</td>
+                <td align="left">{{verify_error}}</td>
             </tr>
         </table>
-        <input class="submit button" type="submit" name="submit" value="Submit">
+        <input type="submit" name="submit" value="Submit">
     </form>
 </div>
 
